@@ -17,6 +17,10 @@ return new class extends Migration
             $table->string('state');
             $table->string('soil_type');
             $table->string('climate');
+            $table->string('key')->nullable()->unique();
+            $table->string('rainfall_range')->nullable();
+            $table->string('season')->nullable();
+            $table->integer('health_score')->nullable();
             $table->timestamps();
         });
     }

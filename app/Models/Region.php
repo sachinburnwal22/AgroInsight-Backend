@@ -6,9 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use App\Models\LandHolding;
-use App\Models\Irrigation;
-use App\Models\CroppingPattern;
 
 class Region extends Model
 {
@@ -24,6 +21,10 @@ class Region extends Model
         'state',
         'soil_type',
         'climate',
+        'key',
+        'rainfall_range',
+        'season',
+        'health_score',
     ];
 
     /**

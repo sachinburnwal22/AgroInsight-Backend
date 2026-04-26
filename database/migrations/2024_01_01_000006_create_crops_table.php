@@ -15,7 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->float('water_requirement');
-            $table->enum('season', ['kharif', 'rabi']);
+            $table->enum('season', ['kharif', 'rabi', 'zaid', 'year-round', 'monsoon', 'winter', 'summer'])->nullable();
+            $table->text('why_grown')->nullable();
+            $table->string('ideal_soil')->nullable();
+            $table->string('market_demand')->nullable();
+            $table->string('government_support')->nullable();
+            $table->string('emoji')->nullable();
+            $table->string('expected_yield')->nullable();
             $table->timestamps();
         });
     }

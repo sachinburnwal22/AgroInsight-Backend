@@ -19,6 +19,12 @@ class Crop extends Model
         'name',
         'water_requirement',
         'season',
+        'why_grown',
+        'ideal_soil',
+        'market_demand',
+        'government_support',
+        'emoji',
+        'expected_yield',
     ];
 
     /**
