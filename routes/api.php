@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\RegionController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test', function () {
@@ -29,3 +31,12 @@ Route::post('/soil/analyze', [SoilController::class, 'analyze']);
 Route::post('/weather/view', [WeatherController::class, 'view']);
 Route::post('/report/generate', [ReportController::class, 'generate']);
 Route::post('/alerts', [AlertController::class, 'store']);
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/user', [ProfileController::class, 'show']);
+    Route::post('/user/update', [ProfileController::class, 'update']); // Using POST to handle multipart/form-data for file uploads
+});

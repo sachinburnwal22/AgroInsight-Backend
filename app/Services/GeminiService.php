@@ -14,8 +14,8 @@ class GeminiService
     public function __construct()
     {
         $this->apiKey = env('GEMINI_API_KEY');
-        // gemini-1.5-flash is deprecated, using gemini-2.5-flash
-        $this->model = 'gemini-2.5-flash';
+        // Using gemini-1.5-pro as it has a higher free tier limit (1500/day) compared to 2.5-flash (20/day)
+        $this->model = 'gemini-1.5-pro';
     }
 
     public function generateContent(string $prompt): string
