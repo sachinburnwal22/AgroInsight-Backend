@@ -9,8 +9,9 @@ class ProfileController extends Controller
 {
     public function show(Request $request)
     {
+        $user = $request->user()->loadCount(['posts', 'communities']);
         return response()->json([
-            'user' => $request->user(),
+            'user' => $user,
         ]);
     }
 
@@ -43,6 +44,7 @@ class ProfileController extends Controller
         }
 
         $user->save();
+        $user->loadCount(['posts', 'communities']);
 
         return response()->json([
             'user' => $user,
