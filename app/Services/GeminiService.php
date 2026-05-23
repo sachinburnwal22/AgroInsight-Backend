@@ -9,13 +9,12 @@ class GeminiService
 {
     protected $apiKey;
     protected $model;
-    protected $baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models';
+    protected $baseUrl = 'https://generativelanguage.googleapis.com/v1/models';
 
     public function __construct()
     {
         $this->apiKey = env('GEMINI_API_KEY');
-        // Using gemini-1.5-pro as it has a higher free tier limit (1500/day) compared to 2.5-flash (20/day)
-        $this->model = 'gemini-1.5-pro';
+        $this->model = 'gemini-2.5-flash';
     }
 
     public function generateContent(string $prompt): string

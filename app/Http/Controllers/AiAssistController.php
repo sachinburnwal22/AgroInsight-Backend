@@ -32,4 +32,23 @@ class AiAssistController extends Controller
             'suggestion' => $aiResponse
         ]);
     }
+
+    public function marketRecommendations(Request $request)
+    {
+        $request->validate([
+            'crop' => 'nullable|string',
+            'region' => 'nullable|string'
+        ]);
+
+        $crop = $request->crop ?? 'Wheat';
+        $region = $request->region ?? 'Central India';
+
+        $prompt = "As an agricultural AI expert, list the best 3 types of products (seeds, fertilizers, or tools) for growing {$crop} in {$region} in India. Provide the output as a clean bulleted list where each bullet starts with the product type name in bold followed by a brief description. Make it concise and actionable.";
+
+        $aiResponse = $this->geminiService->generateContent($prompt);
+
+        return response()->json([
+            'recommendations' => $aiResponse
+        ]);
+    }
 }

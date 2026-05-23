@@ -24,6 +24,9 @@ use App\Http\Controllers\SoilController;
 use App\Http\Controllers\WeatherController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AlertController;
+use App\Http\Controllers\ShopController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\PaymentController;
 
 Route::get('/regions', [RegionController::class, 'index']);
 Route::get('/regions/{id}', [RegionController::class, 'show']);
@@ -40,6 +43,10 @@ Route::post('/alerts', [AlertController::class, 'store']);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+// Marketplace Public Routes
+Route::get('/shops', [ShopController::class, 'index']);
+Route::get('/shops/{id}/products', [ShopController::class, 'products']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -65,4 +72,24 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/posts/{id}/like', [LikeController::class, 'toggle']);
 
     Route::post('/ai/suggest', [AiAssistController::class, 'suggest']);
+    Route::post('/market/recommendations', [AiAssistController::class, 'marketRecommendations']);
+
+    // Advisor Authenticated Routes
+    Route::post('/location/update', [\App\Http\Controllers\AdvisorController::class, 'updateLocation']);
+
+    // Marketplace Cart Routes
+    Route::get('/cart', [CartController::class, 'index']);
+    Route::post('/cart/add', [CartController::class, 'add']);
+    Route::delete('/cart/remove/{id}', [CartController::class, 'remove']);
+
+    // Marketplace Payment Routes
+    Route::post('/payment/create-order', [PaymentController::class, 'createOrder']);
+    Route::post('/payment/verify', [PaymentController::class, 'verify']);
 });
+
+// Advisor Public Routes
+Route::get('/weather/live', [\App\Http\Controllers\AdvisorController::class, 'getLiveWeather']);
+Route::get('/weather/alerts', [\App\Http\Controllers\AdvisorController::class, 'getWeatherAlerts']);
+Route::get('/crop/recommendations', [\App\Http\Controllers\AdvisorController::class, 'getCropRecommendations']);
+Route::get('/product/recommendations', [\App\Http\Controllers\AdvisorController::class, 'getProductRecommendations']);
+
