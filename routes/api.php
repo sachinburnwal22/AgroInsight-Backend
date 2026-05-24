@@ -85,6 +85,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // Marketplace Payment Routes
     Route::post('/payment/create-order', [PaymentController::class, 'createOrder']);
     Route::post('/payment/verify', [PaymentController::class, 'verify']);
+
+    // AgriIntel Authenticated Routes
+    Route::get('/news/location-based', [\App\Http\Controllers\NewsController::class, 'getLocationBased']);
+    Route::post('/articles/save', [\App\Http\Controllers\NewsController::class, 'saveArticle']);
+    Route::get('/articles/saved', [\App\Http\Controllers\NewsController::class, 'getSavedArticles']);
 });
 
 // Advisor Public Routes
@@ -92,4 +97,14 @@ Route::get('/weather/live', [\App\Http\Controllers\AdvisorController::class, 'ge
 Route::get('/weather/alerts', [\App\Http\Controllers\AdvisorController::class, 'getWeatherAlerts']);
 Route::get('/crop/recommendations', [\App\Http\Controllers\AdvisorController::class, 'getCropRecommendations']);
 Route::get('/product/recommendations', [\App\Http\Controllers\AdvisorController::class, 'getProductRecommendations']);
+
+// AgriIntel Public Routes
+Route::get('/news/live', [\App\Http\Controllers\NewsController::class, 'getLive']);
+Route::get('/news/trending', [\App\Http\Controllers\NewsController::class, 'getTrending']);
+Route::get('/schemes/all', [\App\Http\Controllers\SchemeController::class, 'getAll']);
+Route::get('/schemes/state/{state}', [\App\Http\Controllers\SchemeController::class, 'getByState']);
+Route::get('/alerts/government', [\App\Http\Controllers\GovAlertController::class, 'index']);
+Route::post('/news/{id}/ai-summary', [\App\Http\Controllers\NewsController::class, 'getAiSummary']);
+Route::post('/schemes/{id}/explain', [\App\Http\Controllers\SchemeController::class, 'explainScheme']);
+
 

@@ -421,5 +421,10 @@ class DatabaseSeeder extends Seeder
                 }
             }
         }
+
+        $this->call([
+            GovernmentSchemeSeeder::class,
+            GovernmentAlertSeeder::class,
+        ]);
     }
 }
