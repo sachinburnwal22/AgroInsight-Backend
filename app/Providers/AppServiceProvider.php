@@ -20,25 +20,38 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         if (config('database.default') === 'sqlite') {
-            try {
-                $dbPath = config('database.connections.sqlite.database');
-                if ($dbPath && !file_exists($dbPath)) {
-                    $dir = dirname($dbPath);
+            $dbPath = config('database.connections.sqlite.database');
+            $fallbackDb = database_path('database.sqlite');
+
+            if ($dbPath && $dbPath !== $fallbackDb) {
+                $dir = dirname($dbPath);
+                
+                try {
+                    // Try to create the directory if it doesn't exist
                     if (!is_dir($dir)) {
                         mkdir($dir, 0755, true);
                     }
                     
-                    // Copy the default database from the git repo if it exists, otherwise touch the file
-                    $defaultDb = database_path('database.sqlite');
-                    if (file_exists($defaultDb) && $dbPath !== $defaultDb) {
-                        copy($defaultDb, $dbPath);
+                    // Verify if the directory is writable
+                    if (is_writable($dir)) {
+                        if (!file_exists($dbPath)) {
+                            if (file_exists($fallbackDb)) {
+                                copy($fallbackDb, $dbPath);
+                            } else {
+                                touch($dbPath);
+                            }
+                        }
                     } else {
-                        touch($dbPath);
+                        // Directory is not writable, fallback to ephemeral database
+                        throw new \Exception("Directory {$dir} is not writable.");
                     }
+                } catch (\Throwable $e) {
+                    // Log the warning but do not prevent the application from booting
+                    \Illuminate\Support\Facades\Log::warning("SQLite persistent database directory not writable, falling back to ephemeral database. Error: " . $e->getMessage());
+                    
+                    // Force Laravel to use the ephemeral database inside the repository
+                    config(['database.connections.sqlite.database' => $fallbackDb]);
                 }
-            } catch (\Throwable $e) {
-                // Log the exception but do not prevent the application from booting
-                \Illuminate\Support\Facades\Log::error("SQLite Database Auto-Initialization failed: " . $e->getMessage());
             }
         }
     }
