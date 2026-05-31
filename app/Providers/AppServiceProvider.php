@@ -34,26 +34,12 @@ class AppServiceProvider extends ServiceProvider
                     
                     // Verify if the directory is writable
                     if (is_writable($dir)) {
-                        $shouldCopy = !file_exists($dbPath);
+                        $seededSize = file_exists($fallbackDb) ? filesize($fallbackDb) : 274432;
+                        $shouldCopy = !file_exists($dbPath) || (file_exists($dbPath) && filesize($dbPath) < $seededSize);
                         
-                        // If file exists, check if it actually has data
-                        if (!$shouldCopy) {
-                            try {
-                                $hasRegions = \Illuminate\Support\Facades\DB::table('regions')->exists();
-                                if (!$hasRegions) {
-                                    $shouldCopy = true;
-                                }
-                            } catch (\Throwable $e) {
-                                // If the table doesn't exist, we need to copy the seeded database
-                                $shouldCopy = true;
-                            }
-                        }
-
                         if ($shouldCopy) {
                             if (file_exists($fallbackDb)) {
                                 copy($fallbackDb, $dbPath);
-                                // Purge the DB connection to ensure Laravel opens the newly copied database
-                                \Illuminate\Support\Facades\DB::purge();
                             } else if (!file_exists($dbPath)) {
                                 touch($dbPath);
                             }
