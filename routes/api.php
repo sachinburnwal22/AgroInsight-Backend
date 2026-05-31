@@ -74,6 +74,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/ai/suggest', [AiAssistController::class, 'suggest']);
     Route::post('/market/recommendations', [AiAssistController::class, 'marketRecommendations']);
 
+    // Community Co-Explore Routes
+    Route::post('/invite/send', [\App\Http\Controllers\CoExploreController::class, 'sendInvite']);
+    Route::post('/invite/respond', [\App\Http\Controllers\CoExploreController::class, 'respondInvite']);
+    Route::get('/notifications', [\App\Http\Controllers\CoExploreController::class, 'getNotifications']);
+    Route::post('/session/end', [\App\Http\Controllers\CoExploreController::class, 'endSession']);
+
     // Advisor Authenticated Routes
     Route::post('/location/update', [\App\Http\Controllers\AdvisorController::class, 'updateLocation']);
 
