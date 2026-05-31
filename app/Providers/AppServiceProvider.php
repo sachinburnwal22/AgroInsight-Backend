@@ -34,10 +34,11 @@ class AppServiceProvider extends ServiceProvider
                     
                     // Verify if the directory is writable
                     if (is_writable($dir)) {
-                        if (!file_exists($dbPath)) {
+                        $shouldCopy = !file_exists($dbPath) || (file_exists($dbPath) && filesize($dbPath) < 50000);
+                        if ($shouldCopy) {
                             if (file_exists($fallbackDb)) {
                                 copy($fallbackDb, $dbPath);
-                            } else {
+                            } else if (!file_exists($dbPath)) {
                                 touch($dbPath);
                             }
                         }
